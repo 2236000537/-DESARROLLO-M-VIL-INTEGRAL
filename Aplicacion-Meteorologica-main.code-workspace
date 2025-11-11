@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Aplicacion-Meteorologica-main",
+			"path": "../../../../Users/lenovo/Downloads/Aplicacion-Meteorologica-main/Aplicacion-Meteorologica-main"
+		},
+		{
+			"name": "ALERTACLIMATICA-app",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "ALERTACLIMATICA-app"
+	}
+}
