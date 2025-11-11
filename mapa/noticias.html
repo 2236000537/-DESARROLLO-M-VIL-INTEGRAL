@@ -13,62 +13,9 @@ Instrucciones:
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Noticias del Clima</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#ffffff;
-      --card:#0b1220;
-      --muted:#9aa4b2;
-      --accent:#29a3ff;
-      --glass: rgba(255,255,255,0.03);
-      --radius:12px;
-      color-scheme: dark;
-      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-    }
-    *{box-sizing:border-box}
-    body{margin:0; background:linear-gradient(180deg,#061021 0%, #071426 100%); color:#e6eef6; min-height:100vh}
-    header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.03)}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#6ee7b7);display:flex;align-items:center;justify-content:center;font-weight:700;color:#042033}
-    nav{display:flex;gap:12px;align-items:center}
-    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px}
-    nav a:hover{background:var(--glass);color:var(--accent)}
+    <link rel="stylesheet" href="../mapa/css/noticias.css">
 
-    .container{max-width:1100px;margin:20px auto;padding:12px}
-    .grid{display:grid;grid-template-columns:1fr 340px;gap:18px}
 
-    /* Main card list */
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);padding:14px;border-radius:var(--radius)}
-    .article-list{display:flex;flex-direction:column;gap:12px}
-    .article{display:flex;gap:12px;align-items:flex-start}
-    .thumb{width:120px;height:80px;border-radius:10px;background-size:cover;background-position:center;flex-shrink:0}
-    .meta{flex:1}
-    .meta h3{margin:0 0 6px 0;font-size:1.05rem}
-    .meta p{margin:0;color:var(--muted);font-size:0.95rem}
-    .tags{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--muted)}
-
-    /* Sidebar */
-    .sidebar .weather-card{display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;padding:14px}
-    .temp{font-size:42px;font-weight:700}
-    .small{color:var(--muted);font-size:13px}
-    .forecast{display:flex;gap:8px;overflow:auto;padding-top:6px}
-    .day{min-width:60px;padding:8px;border-radius:10px;background:rgba(255,255,255,0.02)}
-
-    /* search / controls */
-    .controls{display:flex;gap:8px;align-items:center}
-    .search{flex:1;display:flex;gap:8px}
-    input[type="search"]{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit;outline:none}
-    button{background:var(--accent);border:none;color:#042033;padding:10px 12px;border-radius:10px;font-weight:600;cursor:pointer}
-
-    footer{max-width:1100px;margin:18px auto;color:var(--muted);font-size:13px;padding:12px}
-
-    /* responsive */
-    @media (max-width:880px){
-      .grid{grid-template-columns:1fr;}
-      .thumb{width:110px;height:72px}
-      .sidebar{order:2}
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -81,10 +28,10 @@ Instrucciones:
     </div>
     <nav>
        <div class="sidebar" id="sidebar">
-    <a href="">🏠 Inicio</a>
-    <a href="mapa/noticias.html">⚠️ Noticias</a>
-    <a href="mapa/mapa.html">🗺 Mapa</a>
-    <a href="mapa/foro.html">⚙️ Foro</a>
+    <a href="../index.html">🏠 Inicio</a>
+    <a href="../mapa/noticias.html">⚠️ Noticias</a>
+    <a href="../mapa/mapa.html">🗺 Mapa</a>
+    <a href="../mapa/foro.html">⚙️ Foro</a>
   </div>
     </nav>
   </header>
@@ -155,113 +102,12 @@ Instrucciones:
   </main>
 
   <footer>
-    © Noticias del Clima — Plantilla. Puedes integrar un API meteorológico para datos reales.
   </footer>
 
-  <script>
-    // Datos de ejemplo
-    const sampleArticles = [
-      {id:1,title:"Frente frío provoca lluvias intensas en el norte",summary:"Se esperan chubascos y descensos de temperatura esta noche.",thumb:'https://images.unsplash.com/photo-1502209524168-acea936a9a4b?auto=format&fit=crop&w=800&q=60',tags:['alert','lluvias'],city:'Chihuahua'},
-      {id:2,title:"Ola de calor se intensifica en el centro del país",summary:"Recomendaciones: hidratarse y evitar exposición al sol entre 12:00 y 16:00.",thumb:'https://images.unsplash.com/photo-1499346030926-9a72daac6c63?auto=format&fit=crop&w=800&q=60',tags:['forecast','calor'],city:'CDMX'},
-      {id:3,title:"Nave espacial detecta polvo sahariano sobre el Caribe",summary:"Afectación mínima en temperaturas, pero reducción de la calidad del aire.",thumb:'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=60',tags:['report','polvo'],city:'Cancún'}
-    ];
 
-    const sampleAlerts = [
-      {id:1,msg:'Alerta amarilla por vientos en Hidalgo'},
-      {id:2,msg:'Aviso de inundaciones en zonas bajas de Sinaloa'}
-    ];
+     <script src="../mapa/js/noticias.js">
 
-    function renderArticles(list){
-      const container = document.getElementById('articles');
-      container.innerHTML = '';
-      list.forEach(a=>{
-        const el = document.createElement('div'); el.className='article card';
-        el.innerHTML = `
-          <div class="thumb" style="background-image:url('${a.thumb}')"></div>
-          <div class="meta">
-            <h3>${a.title}</h3>
-            <p>${a.summary}</p>
-            <div class="tags">${a.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-          </div>
-        `;
-        container.appendChild(el);
-      })
-    }
+     </script>
 
-    function renderAlerts(){
-      const el = document.getElementById('alerts'); el.innerHTML='';
-      sampleAlerts.forEach(a=>{
-        const li = document.createElement('li'); li.style.padding='8px'; li.style.borderRadius='8px'; li.style.background='rgba(255,255,255,0.02)'; li.textContent = a.msg; el.appendChild(li);
-      })
-    }
-
-    function renderForecastMock(){
-      const f = document.getElementById('forecast'); f.innerHTML='';
-      const days = ['Hoy','Mañana','Mié','Jue','Vie'];
-      days.forEach((d,i)=>{
-        const div = document.createElement('div'); div.className='day'; div.innerHTML = `<div style='font-weight:700'>${Math.floor(20+i)}°</div><div style='font-size:12px;color:var(--muted)'>${d}</div>`;
-        f.appendChild(div);
-      })
-    }
-
-    // Inicializar contenido de ejemplo
-    renderArticles(sampleArticles);
-    renderAlerts();
-    renderForecastMock();
-
-    // Buscador / filtro
-    document.getElementById('btnSearch').addEventListener('click', ()=>{
-      const q = document.getElementById('q').value.toLowerCase();
-      const f = document.getElementById('filter').value;
-      let res = sampleArticles.filter(a=> (a.title+a.summary+a.city).toLowerCase().includes(q));
-      if(f!=='all') res = res.filter(a=> a.tags.includes(f));
-      renderArticles(res);
-    });
-
-    document.getElementById('refresh').addEventListener('click', ()=>{
-      // en app real -> volver a pedir API
-      renderArticles(sampleArticles);
-      renderAlerts();
-      renderForecastMock();
-      alert('Contenido actualizado (datos de ejemplo).');
-    });
-
-    // Localización (placeholder)
-    document.getElementById('btnLocation').addEventListener('click', ()=>{
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{
-          const {latitude, longitude} = pos.coords;
-          document.getElementById('city').textContent = `Lat ${latitude.toFixed(2)}, Lon ${longitude.toFixed(2)}`;
-          // aquí podrías llamar a fetchWeather(latitude, longitude)
-        }, err=>{ alert('No fue posible obtener la ubicación.') })
-      } else alert('Geolocalización no soportada.');
-    });
-
-    // Ejemplo de función para traer datos reales (OpenWeatherMap)
-    /*
-    async function fetchWeather(lat, lon){
-      const apiKey = 'TU_API_KEY_AQUI';
-      const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${apiKey}`;
-      const res = await fetch(url);
-      const data = await res.json();
-      document.getElementById('temp').textContent = Math.round(data.current.temp) + '°C';
-      document.getElementById('cond').textContent = data.current.weather[0].description;
-      // render forecast
-      const f = document.getElementById('forecast'); f.innerHTML='';
-      data.daily.slice(0,5).forEach(d=>{
-        const div = document.createElement('div'); div.className='day';
-        const date = new Date(d.dt*1000);
-        div.innerHTML = `<div style='font-weight:700'>${Math.round(d.temp.day)}°</div><div style='font-size:12px;color:var(--muted)'>${date.toLocaleDateString('es-MX',{weekday:'short'})}</div>`;
-        f.appendChild(div);
-      })
-    }
-    */
-
-    // Botón detalles
-    document.getElementById('btnDetails').addEventListener('click', ()=>{
-      alert('Detalles del pronóstico (ejemplo). Integra una API para datos reales.');
-    });
-
-  </script>
 </body>
 </html>

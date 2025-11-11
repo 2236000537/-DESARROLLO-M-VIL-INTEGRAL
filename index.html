@@ -2,147 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <title>Alerta Climática — Pronóstico 7 días</title>
+  <title>Alerta Climática.</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="mapa/css/index.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
   <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
 
-  <style>
-    :root{
-      --bg-start: #b3d9ff;
-      --bg-end: #e6f2ff;
-      --primary:#0077b6;
-      --accent:#ffb703;
-      --danger:#b30000;
-    }
-    body {
-      font-family: 'Poppins', sans-serif;
-      margin:0;
-      background: linear-gradient(to bottom, var(--bg-start), var(--bg-end));
-      color: #003366;
-      padding-bottom: 70px;
-    }
-
-    /* =============== MENÚ LATERAL =============== */
-    .sidebar{
-      position: fixed;
-      top:0;
-      left:0;
-      height:100%;
-      width:230px;
-      background:#007bff;
-      color:white;
-      padding:20px 14px;
-      box-shadow:2px 0 12px rgba(0,0,0,0.25);
-      transform:translateX(-100%);
-      transition:0.3s;
-      z-index:2100;
-    }
-    .sidebar h3{
-      margin-top:0;
-      text-align:center;
-      font-weight:600;
-      border-bottom:1px solid rgb(255, 255, 255);
-      padding-bottom:8px;
-    }
-    .sidebar a{
-      display:block;
-      color:rgb(100, 171, 193);
-      text-decoration:none;
-      padding:12px 0;
-      font-size:16px;
-      border-bottom:1px solid rgba(255,255,255,0.1);
-    }
-    .sidebar a:hover{
-      background:rgb(160, 228, 237);
-      border-radius:6px;
-      padding-left:8px;
-      transition:0.2s;
-    }
-    .overlay{
-      position:fixed;
-      top:0;
-      left:0;
-      right:0;
-      bottom:0;
-      background:rgba(0,0,0,0.4);
-      display:none;
-      z-index:2000;
-    }
-
-    /* ============= BARRA INFERIOR ================ */
-    .navbar{
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      background:#007bff;
-      display:flex;
-      justify-content:space-around;
-      padding:10px 0;
-      box-shadow:0 -2px 8px rgba(0,0,0,0.25);
-      border-top-left-radius:12px;
-      border-top-right-radius:12px;
-      z-index:1500;
-    }
-    .nav-item{
-      color:white;
-      text-decoration:none;
-      text-align:center;
-      font-size:14px;
-      font-weight:500;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
-    .nav-item ion-icon{ font-size:22px; margin-bottom:4px; }
-    .nav-item:hover{ opacity:0.85; transform:translateY(-2px); transition:0.3s;}
-
-    ion-content { --padding-bottom: 90px; }
-
-    .main-card { max-width: 920px; margin: 16px auto; }
-    .weather-icon { font-size: 64px; }
-
-    .alert-box {
-      background-color: #fff1f0;
-      border:1px solid rgba(179,0,0,0.12);
-      padding: 10px;
-      border-radius: 10px;
-      margin: 10px 0;
-      text-align: center;
-      font-weight: 700;
-      color: var(--danger);
-    }
-
-    .forecast-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .day-card {
-      background: rgba(255,255,255,0.9);
-      padding: 10px;
-      border-radius: 8px;
-      text-align:center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-
-    .small-info {
-      display:flex;
-      gap:12px;
-      justify-content:center;
-      flex-wrap:wrap;
-      margin-top:8px;
-    }
-
-    .small-info div { font-size: 13px; opacity:0.9; }
-    .meta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:6px; }
-    .chip { background: rgba(255,255,255,0.9); padding:6px 10px; border-radius:999px; font-size:13px; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
-
-  </style>
 </head>
 
 <body>
@@ -221,66 +87,8 @@
 </ion-app>
 
 
-<script>
-function openMenu(){
-  document.getElementById("sidebar").style.transform = "translateX(0)";
-  document.getElementById("overlay").style.display = "block";
-}
-function closeMenu(){
-  document.getElementById("sidebar").style.transform = "translateX(-100%)";
-  document.getElementById("overlay").style.display = "none";
-}
 
-const sampleForecast = [
-  {day:'Lun', date:'10/11', icon:'☀️', min:18, max:28, pop:5, desc:'Soleado'},
-  {day:'Mar', date:'11/11', icon:'⛅', min:17, max:26, pop:10, desc:'Parcialmente nublado'},
-  {day:'Mié', date:'12/11', icon:'🌧️', min:16, max:22, pop:65, desc:'Lluvias dispersas'},
-  {day:'Jue', date:'13/11', icon:'⛈️', min:15, max:20, pop:80, desc:'Tormentas eléctricas'},
-  {day:'Vie', date:'14/11', icon:'🌦️', min:16, max:23, pop:40, desc:'Chubascos'},
-  {day:'Sáb', date:'15/11', icon:'🌤️', min:17, max:25, pop:15, desc:'Nubes y sol'},
-  {day:'Dom', date:'16/11', icon:'☀️', min:18, max:27, pop:5, desc:'Soleado'}
-];
-
-function renderForecast(data){
-  const container = document.getElementById('forecast');
-  container.innerHTML = '';
-  data.forEach(d => {
-    const div = document.createElement('div');
-    div.className = 'day-card';
-    div.innerHTML = `
-      <div style="font-weight:700">${d.day}</div>
-      <div style="font-size:20px;margin:6px 0;">${d.icon}</div>
-      <div style="font-weight:600">${d.max}° / <span style="opacity:0.8">${d.min}°</span></div>
-      <div style="font-size:13px;margin-top:6px;opacity:0.9">${d.desc}</div>
-      <div style="margin-top:8px;font-size:12px">Prob. lluvia: ${d.pop}%</div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function updateCurrentRandom(){
-  const today = sampleForecast[0];
-  document.getElementById('current-icon').textContent = today.icon;
-  document.getElementById('temp').textContent = today.max + '°C';
-  document.getElementById('desc').textContent = today.desc;
-  document.getElementById('humidity').textContent = 'Humedad: ' + (40 + Math.floor(Math.random()*40)) + '%';
-  document.getElementById('wind').textContent = 'Viento: ' + (5 + Math.floor(Math.random()*20)) + ' km/h';
-  document.getElementById('feels').textContent = 'Sensación: ' + (today.max + 1) + '°C';
-  const highPop = sampleForecast.slice(0,2).some(d => d.pop >= 60);
-  document.getElementById('alert-box').style.display = highPop ? 'block' : 'none';
-  document.getElementById('extended').textContent =
-    `Última actualización: ${new Date().toLocaleString()}. Probabilidad de lluvia: ${today.pop}%.`;
-}
-
-renderForecast(sampleForecast);
-updateCurrentRandom();
-
-document.getElementById('update-btn').addEventListener('click', () => {
-  sampleForecast.push(sampleForecast.shift());
-  renderForecast(sampleForecast);
-  updateCurrentRandom();
-});
-</script>
+   <script src="/mapa/js/index1.js"></script>
 
 </body>
 </html>

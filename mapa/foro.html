@@ -5,35 +5,19 @@
     <title>Foro de Reseñas</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../mapa/css/foro.css">
+
     <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
     <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
-    <style>
-      body { font-family: 'Poppins', sans-serif; margin:0; background:#f5f7fb; color:#082032; }
-      .container { max-width:900px; margin:18px auto; padding:12px; }
-      header { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-      .card { background:white; border-radius:10px; padding:12px; box-shadow: 0 3px 10px rgba(2,6,23,0.06); }
-      .comments { margin-top:12px; display:flex; flex-direction:column; gap:10px; }
-      .comment { padding:10px; border-radius:8px; background:linear-gradient(180deg, #ffffff, #fbfdff); }
-      .meta { font-size:13px; color: #465a6b; display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-      .mention { color:#0a58ca; font-weight:600; background:rgba(10,88,202,0.06); padding:2px 6px; border-radius:6px;}
-      .actions { display:flex; gap:8px; margin-top:8px; }
-      .btn-like { background:#e6f2ff; padding:6px 10px; border-radius:8px; cursor:pointer; border:1px solid rgba(0,0,0,0.04); }
-      .small { font-size:13px; color:#6b7280; }
-      .input-row { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-start; }
-      input[type="text"], textarea { width:100%; padding:8px; border-radius:8px; border:1px solid #dbe6f0; font-family:inherit; }
-      textarea { min-height:80px; resize:vertical; }
-      .inline { display:inline-block; width:auto; }
 
-
-   </style>
   </head>
 
   <body>
      <div class="sidebar" id="sidebar">
-    <a href="">🏠 Inicio</a>
-    <a href="mapa/noticias.html">⚠️ Noticias</a>
-    <a href="mapa/mapa.html">🗺 Mapa</a>
-    <a href="mapa/foro.html">⚙️ Foro</a>
+    <a href="../index.html">🏠 Inicio</a>
+    <a href="../mapa/noticias.html">⚠️ Noticias</a>
+    <a href="../mapa/mapa.html">🗺 Mapa</a>
+    <a href="../mapa/foro.html">⚙️ Foro</a>
   </div>
 
     <div class="container">
@@ -69,112 +53,7 @@
       </section>
     </div>
 
-    <script>
-      // Utils
-      function escapeHtml(str) {
-        return str.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[m]));
-      }
+   <script src="/mapa/js/index.js"></script>
 
-      const STORAGE_KEY = 'foro_reseñas_v1';
-
-      function loadComments() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY);
-          return raw ? JSON.parse(raw) : [];
-        } catch(e){
-          console.error(e);
-          return [];
-        }
-      }
-
-      function saveComments(list) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-      }
-
-      function highlightMentions(text) {
-        // Reemplaza @usuario por span con clase mention
-        return escapeHtml(text).replace(/@([a-zA-Z0-9_]+)/g, '<span class="mention">@$1</span>');
-      }
-
-      function renderComments() {
-        const container = document.getElementById('comments');
-        const list = loadComments();
-        container.innerHTML = '';
-        document.getElementById('empty').style.display = list.length ? 'none' : 'block';
-
-        // Mostrar más recientes primero
-        list.slice().reverse().forEach((c, idx) => {
-          const div = document.createElement('div');
-          div.className = 'comment';
-          const time = new Date(c.time).toLocaleString();
-          div.innerHTML = `
-            <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start;">
-              <div>
-                <div style="font-weight:700;">${escapeHtml(c.name || 'Anónimo')}</div>
-                <div class="meta">${time} · <span class="small">Votos: <strong id="votes-${c.id}">${c.votes||0}</strong></span></div>
-              </div>
-              <div style="text-align:right;">
-                <button data-id="${c.id}" class="btn-like" aria-label="Me gusta">👍</button>
-                <button data-id-del="${c.id}" style="background:#fff;border:1px solid #ffd6d6;padding:6px 8px;border-radius:8px;cursor:pointer;">Eliminar</button>
-              </div>
-            </div>
-            <div style="margin-top:8px;">${highlightMentions(c.text)}</div>
-          `;
-          container.appendChild(div);
-        });
-      }
-
-      // Eventos
-      document.getElementById('post-btn').addEventListener('click', () => {
-        const name = document.getElementById('name').value.trim();
-        const text = document.getElementById('content').value.trim();
-        if (!text) {
-          alert('Escribe una reseña antes de publicar.');
-          return;
-        }
-        const list = loadComments();
-        const newItem = {
-          id: Date.now().toString(),
-          name: name || 'Anónimo',
-          text,
-          time: Date.now(),
-          votes: 0
-        };
-        list.push(newItem);
-        saveComments(list);
-        renderComments();
-        document.getElementById('content').value = '';
-      });
-
-      document.getElementById('clear-btn').addEventListener('click', () => {
-        document.getElementById('name').value = '';
-        document.getElementById('content').value = '';
-      });
-
-      // Delegación para likes y borrar
-      document.getElementById('comments').addEventListener('click', (e) => {
-        const target = e.target;
-        const idLike = target.getAttribute('data-id');
-        const idDel = target.getAttribute('data-id-del');
-        if (idLike) {
-          const list = loadComments();
-          const idx = list.findIndex(x => x.id === idLike);
-          if (idx >= 0) {
-            list[idx].votes = (list[idx].votes || 0) + 1;
-            saveComments(list);
-            document.getElementById('votes-' + idLike).textContent = list[idx].votes;
-          }
-        } else if (idDel) {
-          if (!confirm('¿Eliminar esta reseña?')) return;
-          let list = loadComments();
-          list = list.filter(x => x.id !== idDel);
-          saveComments(list);
-          renderComments();
-        }
-      });
-
-      // Inicializar
-      renderComments();
-    </script>
   </body>
 </html>
