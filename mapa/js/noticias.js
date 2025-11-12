@@ -1,156 +1,296 @@
-// ==================== DATOS DE NOTICIAS ====================
-const articles = [
-  {
-    id: 1,
-    title: "Frente frío número 14 provoca descenso de temperatura",
-    summary: "El Servicio Meteorológico Nacional informó la llegada de un nuevo frente frío, causando bajas temperaturas en el norte del país.",
-    thumb: "https://images.unsplash.com/photo-1542327897-37fa1ff59b9b?auto=format&fit=crop&w=800&q=60",
-    tags: ["alert", "frío"],
-    city: "Chihuahua"
-  },
-  {
-    id: 2,
-    title: "Lluvias intensas en Tamaulipas generan inundaciones",
-    summary: "Protección Civil activó albergues debido a encharcamientos y desbordamientos en zonas bajas.",
-    thumb: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=60",
-    tags: ["alert", "lluvia"],
-    city: "Tamaulipas"
-  },
-  {
-    id: 3,
-    title: "Ola de calor afecta el centro del país",
-    summary: "Temperaturas superiores a 38°C se registran en varias entidades. Autoridades recomiendan hidratarse.",
-    thumb: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=60",
-    tags: ["forecast", "calor"],
-    city: "CDMX"
-  },
-  {
-    id: 4,
-    title: "Tormenta eléctrica sorprende a Monterrey",
-    summary: "Rayos y truenos iluminan la ciudad mientras las lluvias continúan durante la madrugada.",
-    thumb: "https://images.unsplash.com/photo-1504386106331-3e4e71712b38?auto=format&fit=crop&w=800&q=60",
-    tags: ["alert", "tormenta"],
-    city: "Monterrey"
-  },
-  {
-    id: 5,
-    title: "Nevada temprana cubre Durango",
-    summary: "Las primeras nevadas del año llegaron a la sierra, atrayendo turistas y cerrando carreteras.",
-    thumb: "https://images.unsplash.com/photo-1608889175123-3c4d9c1a40db?auto=format&fit=crop&w=800&q=60",
-    tags: ["report", "nieve"],
-    city: "Durango"
-  },
-  {
-    id: 6,
-    title: "Viento fuerte derriba árboles en Querétaro",
-    summary: "Rachas superiores a 70 km/h causaron daños menores en la zona metropolitana.",
-    thumb: "https://images.unsplash.com/photo-1558981403-c5f9891e3588?auto=format&fit=crop&w=800&q=60",
-    tags: ["alert", "viento"],
-    city: "Querétaro"
-  },
-  {
-    id: 7,
-    title: "Nube de polvo sahariano llega al Caribe",
-    summary: "Se espera reducción en calidad del aire en las próximas horas.",
-    thumb: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=60",
-    tags: ["report", "polvo"],
-    city: "Cancún"
-  },
-  {
-    id: 8,
-    title: "Humedad elevada genera niebla en Toluca",
-    summary: "Visibilidad reducida por las mañanas afecta tránsito vehicular.",
-    thumb: "https://images.unsplash.com/photo-1543968996-ee822b8176ba?auto=format&fit=crop&w=800&q=60",
-    tags: ["forecast", "niebla"],
-    city: "Toluca"
-  },
-  {
-    id: 9,
-    title: "Corrientes en el Pacífico podrían influir en ciclones",
-    summary: "Meteorólogos observan actividad irregular que podría intensificar tormentas en la región.",
-    thumb: "https://images.unsplash.com/photo-1483794354334-6c81ad8947d1?auto=format&fit=crop&w=800&q=60",
-    tags: ["forecast", "ciclones"],
-    city: "Pacífico Mexicano"
-  },
-  {
-    id: 10,
-    title: "Baja presión podría traer lluvias a Veracruz",
-    summary: "Se recomienda evitar zonas cercanas a cuerpos de agua y mantenerse informado.",
-    thumb: "https://images.unsplash.com/photo-1526726584893-70e6acb8b41b?auto=format&fit=crop&w=800&q=60",
-    tags: ["alert", "lluvia"],
-    city: "Veracruz"
-  }
-];
+/**
+ * Noticias del Clima - Conectado con API
+ * AlertaClimática
+ */
 
-// ==================== RENDER DE NOTICIAS ====================
-function renderArticles(list) {
-  const container = document.getElementById("articles");
-  container.innerHTML = "";
+// Configuración de la API
+const API_URL = 'http://localhost:5000/api';
 
-  list.forEach(a => {
-    const el = document.createElement("div");
-    el.className = "article";
+// Estado global
+let noticiasCache = [];
+let categoriaActual = 'all';
+let busquedaActual = '';
 
-    el.innerHTML = `
-      <img src="${a.thumb}" alt="">
-      <div>
-        <h3>${a.title}</h3>
-        <p>${a.summary}</p>
-        <div class="tag">${a.city}</div>
-      </div>
-    `;
-    container.appendChild(el);
-  });
-}
-
-renderArticles(articles);
-
-// ==================== FILTROS Y BÚSQUEDA ====================
-document.getElementById("btnSearch").onclick = () => {
-  const text = document.getElementById("q").value.toLowerCase();
-  const filtered = articles.filter(a =>
-    a.title.toLowerCase().includes(text) ||
-    a.summary.toLowerCase().includes(text) ||
-    a.city.toLowerCase().includes(text)
-  );
-  renderArticles(filtered);
-};
-
-document.getElementById("filter").onchange = (e) => {
-  const val = e.target.value;
-  if (val === "all") return renderArticles(articles);
-
-  const filtered = articles.filter(a => a.tags.includes(val));
-  renderArticles(filtered);
-};
-
-document.getElementById("refresh").onclick = () => renderArticles(articles);
-
-// ==================== CLIMA LOCAL (SIN API) ====================
-function setWeather(city, temp, cond) {
-  document.getElementById("city").textContent = city;
-  document.getElementById("temp").textContent = temp + "°C";
-  document.getElementById("cond").textContent = cond;
-}
-
-setWeather("Chihuahua, MX", 23, "Parcialmente nublado");
-
-document.getElementById("btnLocation").onclick = () => {
-  navigator.geolocation.getCurrentPosition(() => {
-    alert("Ubicación detectada (simulada). Aquí se conectaría API real.");
-  });
-};
-
-// ==================== ALERTAS ====================
-const alertList = [
-  "Aviso por bajas temperaturas en zona norte.",
-  "Precaución por vientos fuertes en Querétaro.",
-  "Posible tormenta eléctrica en Monterrey.",
-];
-
-const alertContainer = document.getElementById("alerts");
-alertList.forEach(a => {
-  const li = document.createElement("li");
-  li.textContent = "⚠️ " + a;
-  alertContainer.appendChild(li);
+// Inicializar cuando cargue el DOM
+document.addEventListener('DOMContentLoaded', () => {
+  configurarEventos();
+  cargarNoticias();
+  cargarClimaActual();
 });
+
+/**
+ * Configurar eventos
+ */
+function configurarEventos() {
+  // Botón de búsqueda
+  const btnSearch = document.getElementById('btnSearch');
+  if (btnSearch) {
+    btnSearch.addEventListener('click', () => {
+      busquedaActual = document.getElementById('q').value;
+      cargarNoticias();
+    });
+  }
+
+  // Enter en búsqueda
+  const inputBusqueda = document.getElementById('q');
+  if (inputBusqueda) {
+    inputBusqueda.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        busquedaActual = e.target.value;
+        cargarNoticias();
+      }
+    });
+  }
+
+  // Filtro por categoría
+  const filtroSelect = document.getElementById('filter');
+  if (filtroSelect) {
+    filtroSelect.addEventListener('change', (e) => {
+      categoriaActual = e.target.value;
+      cargarNoticias();
+    });
+  }
+
+  // Botón refresh
+  const btnRefresh = document.getElementById('refresh');
+  if (btnRefresh) {
+    btnRefresh.addEventListener('click', () => {
+      cargarNoticias();
+      cargarClimaActual();
+    });
+  }
+
+  // Botón de ubicación
+  const btnLocation = document.getElementById('btnLocation');
+  if (btnLocation) {
+    btnLocation.addEventListener('click', obtenerUbicacion);
+  }
+
+  // Botón de detalles
+  const btnDetails = document.getElementById('btnDetails');
+  if (btnDetails) {
+    btnDetails.addEventListener('click', () => {
+      window.location.href = 'mapa.html';
+    });
+  }
+}
+
+/**
+ * Cargar noticias desde la API
+ */
+async function cargarNoticias() {
+  const container = document.getElementById('articles');
+  
+  if (!container) return;
+
+  // Mostrar loading
+  container.innerHTML = `
+    <div style="text-align: center; padding: 40px;">
+      <div style="font-size: 48px; margin-bottom: 16px;">⏳</div>
+      <p style="color: #6B7280;">Cargando noticias...</p>
+    </div>
+  `;
+
+  try {
+    // Construir URL con filtros
+    let url = `${API_URL}/noticias?limit=20`;
+    
+    if (categoriaActual && categoriaActual !== 'all') {
+      url += `&categoria=${categoriaActual}`;
+    }
+    
+    if (busquedaActual) {
+      url += `&buscar=${encodeURIComponent(busquedaActual)}`;
+    }
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.success && data.data.length > 0) {
+      noticiasCache = data.data;
+      renderizarNoticias(data.data);
+      actualizarAlertas(data.data);
+    } else {
+      mostrarSinNoticias();
+    }
+
+  } catch (error) {
+    console.error('Error al cargar noticias:', error);
+    mostrarError();
+  }
+}
+
+/**
+ * Renderizar noticias en el DOM
+ */
+function renderizarNoticias(noticias) {
+  const container = document.getElementById('articles');
+  
+  if (!container) return;
+
+  container.innerHTML = noticias.map(noticia => `
+    <article class="article-item">
+      <div class="article-header">
+        <span class="badge badge-${noticia.categoria}">
+          ${traducirCategoria(noticia.categoria)}
+        </span>
+        <span class="article-date">${formatearFecha(noticia.fechaPublicacion)}</span>
+      </div>
+      
+      <h3 class="article-title">${noticia.titulo}</h3>
+      
+      <p class="article-content">${noticia.contenido}</p>
+      
+      <div class="article-meta">
+        ${noticia.ciudad ? `<span>📍 ${noticia.ciudad}</span>` : ''}
+        ${noticia.temperatura ? `<span>🌡️ ${noticia.temperatura}</span>` : ''}
+        ${noticia.condicion ? `<span>☁️ ${noticia.condicion}</span>` : ''}
+      </div>
+      
+      <div class="article-footer">
+        <span class="gravedad gravedad-${noticia.gravedad}">
+          ${noticia.gravedad.toUpperCase()}
+        </span>
+        <span class="article-author">Por: ${noticia.autor?.nombre || 'AlertaClimática'}</span>
+      </div>
+    </article>
+  `).join('');
+}
+
+/**
+ * Mostrar mensaje cuando no hay noticias
+ */
+function mostrarSinNoticias() {
+  const container = document.getElementById('articles');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="text-align: center; padding: 60px 20px;">
+      <div style="font-size: 64px; margin-bottom: 16px;">📭</div>
+      <h3 style="color: #1F2937; margin-bottom: 8px;">No hay noticias disponibles</h3>
+      <p style="color: #6B7280;">Intenta cambiar los filtros de búsqueda</p>
+    </div>
+  `;
+}
+
+/**
+ * Mostrar mensaje de error
+ */
+function mostrarError() {
+  const container = document.getElementById('articles');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="text-align: center; padding: 60px 20px;">
+      <div style="font-size: 64px; margin-bottom: 16px;">⚠️</div>
+      <h3 style="color: #1F2937; margin-bottom: 8px;">Error al cargar noticias</h3>
+      <p style="color: #6B7280; margin-bottom: 16px;">
+        Verifica que el servidor esté corriendo en http://localhost:5000
+      </p>
+      <button onclick="cargarNoticias()" style="background: #4F46E5; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+        🔄 Reintentar
+      </button>
+    </div>
+  `;
+}
+
+/**
+ * Actualizar alertas recientes
+ */
+function actualizarAlertas(noticias) {
+  const alertsContainer = document.getElementById('alerts');
+  if (!alertsContainer) return;
+
+  const alertas = noticias
+    .filter(n => n.categoria === 'alert')
+    .slice(0, 3);
+
+  if (alertas.length === 0) {
+    alertsContainer.innerHTML = '<li style="color: #6B7280; font-size: 14px;">No hay alertas activas</li>';
+    return;
+  }
+
+  alertsContainer.innerHTML = alertas.map(alerta => `
+    <li class="alert-item">
+      <div class="alert-icon ${alerta.gravedad}">⚠️</div>
+      <div>
+        <div style="font-weight: 600; font-size: 13px;">${alerta.titulo}</div>
+        <div style="font-size: 11px; color: #6B7280;">${alerta.ciudad || 'General'} - ${formatearFechaCorta(alerta.fechaPublicacion)}</div>
+      </div>
+    </li>
+  `).join('');
+}
+
+/**
+ * Cargar clima actual (simulado o de API)
+ */
+async function cargarClimaActual() {
+  const tempElement = document.getElementById('temp');
+  const condElement = document.getElementById('cond');
+  const cityElement = document.getElementById('city');
+
+  if (!tempElement || !condElement) return;
+
+  // Aquí puedes integrar una API de clima real
+  // Por ahora mostramos datos de ejemplo
+  tempElement.textContent = '27°C';
+  condElement.textContent = 'Parcialmente nublado';
+  if (cityElement) {
+    cityElement.textContent = 'Chihuahua, MX';
+  }
+}
+
+/**
+ * Obtener ubicación del usuario
+ */
+function obtenerUbicacion() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log('Ubicación obtenida:', position.coords);
+        alert(`Ubicación: ${position.coords.latitude}, ${position.coords.longitude}`);
+      },
+      (error) => {
+        console.error('Error al obtener ubicación:', error);
+        alert('No se pudo obtener la ubicación. Verifica los permisos del navegador.');
+      }
+    );
+  } else {
+    alert('Tu navegador no soporta geolocalización');
+  }
+}
+
+/**
+ * Utilidades
+ */
+
+function traducirCategoria(categoria) {
+  const traducciones = {
+    'alert': 'Alerta',
+    'forecast': 'Pronóstico',
+    'report': 'Reporte',
+    'all': 'General'
+  };
+  return traducciones[categoria] || categoria;
+}
+
+function formatearFecha(fecha) {
+  const date = new Date(fecha);
+  const opciones = { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  };
+  return date.toLocaleDateString('es-MX', opciones);
+}
+
+function formatearFechaCorta(fecha) {
+  const date = new Date(fecha);
+  const opciones = { 
+    month: 'short', 
+    day: 'numeric'
+  };
+  return date.toLocaleDateString('es-MX', opciones);
+}

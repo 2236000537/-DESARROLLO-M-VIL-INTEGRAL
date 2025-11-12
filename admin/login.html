@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - AlertaClimática Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <div class="logo">🌦️</div>
+        <h1>AlertaClimática</h1>
+        <p>Panel de Administración</p>
+      </div>
+
+      <form id="loginForm" class="login-form">
+        <div class="alert alert-error" id="errorAlert" style="display: none;">
+          <span class="alert-icon">⚠️</span>
+          <span id="errorMessage"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">
+            <span class="label-icon">📧</span>
+            Correo Electrónico
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            placeholder="tu@email.com"
+            required
+            autocomplete="email"
+          >
+          <span class="error-text" id="emailError"></span>
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            <span class="label-icon">🔒</span>
+            Contraseña
+          </label>
+          <div class="password-input-wrapper">
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            >
+            <button type="button" class="toggle-password" id="togglePassword">
+              👁️
+            </button>
+          </div>
+          <span class="error-text" id="passwordError"></span>
+        </div>
+
+        <button type="submit" class="btn-primary" id="loginBtn">
+          <span class="btn-text">Iniciar Sesión</span>
+          <span class="spinner" style="display: none;">⏳</span>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <p>🔐 Conexión segura mediante HTTPS y JWT</p>
+        <p class="version">v1.0.0</p>
+      </div>
+    </div>
+
+    <div class="background-animation">
+      <div class="cloud cloud1">☁️</div>
+      <div class="cloud cloud2">⛅</div>
+      <div class="cloud cloud3">🌤️</div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/login.js"></script>
+</body>
+</html>
+

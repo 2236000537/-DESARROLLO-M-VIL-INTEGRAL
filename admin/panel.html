@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - AlertaClimática</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/panel.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">🌦️ AlertaClimática</div>
+      <span class="badge badge-admin">Admin</span>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <span class="user-name" id="userName">Cargando...</span>
+        <span class="user-email" id="userEmail"></span>
+      </div>
+      <button class="btn-logout" id="logoutBtn">
+        🚪 Cerrar Sesión
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          📊 Dashboard
+        </a>
+        <a href="#" class="nav-item" data-section="noticias">
+          📰 Gestionar Noticias
+        </a>
+        <a href="#" class="nav-item" data-section="crear">
+          ➕ Crear Noticia
+        </a>
+        <a href="../index.html" class="nav-item">
+          🏠 Ir al Sitio
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>v1.0.0</p>
+        <p>AlertaClimática © 2025</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="content-section active">
+        <h1 class="section-title">📊 Dashboard</h1>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">📰</div>
+            <div class="stat-info">
+              <h3 id="totalNoticias">-</h3>
+              <p>Total Noticias</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-info">
+              <h3 id="totalAlertas">-</h3>
+              <p>Alertas</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">🌤️</div>
+            <div class="stat-info">
+              <h3 id="totalPronosticos">-</h3>
+              <p>Pronósticos</p>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-info">
+              <h3 id="totalReportes">-</h3>
+              <p>Reportes</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-card">
+          <h2>¡Bienvenido al Panel de Administración!</h2>
+          <p>Desde aquí puedes gestionar todas las noticias, alertas y pronósticos del clima de AlertaClimática.</p>
+          <div class="welcome-features">
+            <div class="feature">
+              <span class="feature-icon">✅</span>
+              <span>Crear y editar noticias</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🔒</span>
+              <span>Autenticación segura con JWT</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🛡️</span>
+              <span>Validación de entradas</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">⚡</span>
+              <span>API REST propia</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Noticias Section -->
+      <section id="noticias-section" class="content-section">
+        <div class="section-header">
+          <h1 class="section-title">📰 Gestionar Noticias</h1>
+          <button class="btn-primary" onclick="mostrarSeccion('crear')">
+            ➕ Nueva Noticia
+          </button>
+        </div>
+
+        <div class="filters">
+          <select id="filtroCategoria" class="filter-select">
+            <option value="">Todas las categorías</option>
+            <option value="alert">Alertas</option>
+            <option value="forecast">Pronósticos</option>
+            <option value="report">Reportes</option>
+          </select>
+          <input type="search" id="buscarNoticia" placeholder="Buscar noticia..." class="filter-search">
+          <button class="btn-secondary" id="btnRefrescar">🔄 Refrescar</button>
+        </div>
+
+        <div id="noticiasContainer" class="noticias-grid">
+          <!-- Las noticias se cargarán dinámicamente aquí -->
+        </div>
+
+        <div id="loadingNoticias" class="loading" style="display: none;">
+          <div class="spinner-large">⏳</div>
+          <p>Cargando noticias...</p>
+        </div>
+
+        <div id="emptyNoticias" class="empty-state" style="display: none;">
+          <div class="empty-icon">📭</div>
+          <h3>No hay noticias</h3>
+          <p>Comienza creando tu primera noticia</p>
+          <button class="btn-primary" onclick="mostrarSeccion('crear')">
+            ➕ Crear Noticia
+          </button>
+        </div>
+      </section>
+
+      <!-- Crear/Editar Noticia Section -->
+      <section id="crear-section" class="content-section">
+        <h1 class="section-title" id="formTitle">➕ Crear Noticia</h1>
+
+        <div class="form-card">
+          <form id="noticiaForm">
+            <input type="hidden" id="noticiaId">
+            
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="titulo">
+                  <span class="required">*</span> Título de la Noticia
+                </label>
+                <input 
+                  type="text" 
+                  id="titulo" 
+                  name="titulo" 
+                  placeholder="Ej: Alerta de tormenta eléctrica en Chihuahua"
+                  required
+                  maxlength="200"
+                >
+                <span class="char-count">
+                  <span id="tituloCount">0</span>/200
+                </span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="contenido">
+                  <span class="required">*</span> Contenido
+                </label>
+                <textarea 
+                  id="contenido" 
+                  name="contenido" 
+                  rows="6"
+                  placeholder="Escribe el contenido detallado de la noticia..."
+                  required
+                ></textarea>
+                <span class="char-count">
+                  <span id="contenidoCount">0</span> caracteres
+                </span>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="categoria">
+                  <span class="required">*</span> Categoría
+                </label>
+                <select id="categoria" name="categoria" required>
+                  <option value="all">General</option>
+                  <option value="alert">Alerta</option>
+                  <option value="forecast">Pronóstico</option>
+                  <option value="report">Reporte</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="gravedad">Gravedad</label>
+                <select id="gravedad" name="gravedad">
+                  <option value="baja">Baja</option>
+                  <option value="media" selected>Media</option>
+                  <option value="alta">Alta</option>
+                  <option value="crítica">Crítica</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="ciudad">Ciudad</label>
+                <input 
+                  type="text" 
+                  id="ciudad" 
+                  name="ciudad" 
+                  placeholder="Ej: Chihuahua"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="temperatura">Temperatura</label>
+                <input 
+                  type="text" 
+                  id="temperatura" 
+                  name="temperatura" 
+                  placeholder="Ej: 28°C"
+                >
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="condicion">Condición Climática</label>
+                <input 
+                  type="text" 
+                  id="condicion" 
+                  name="condicion" 
+                  placeholder="Ej: Parcialmente nublado"
+                >
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" id="btnCancelar">
+                ❌ Cancelar
+              </button>
+              <button type="submit" class="btn-primary" id="btnGuardar">
+                <span class="btn-text">💾 Guardar Noticia</span>
+                <span class="spinner" style="display: none;">⏳</span>
+              </button>
+            </div>
+
+            <div class="alert alert-success" id="successAlert" style="display: none;">
+              <span class="alert-icon">✅</span>
+              <span id="successMessage"></span>
+            </div>
+
+            <div class="alert alert-error" id="errorAlertForm" style="display: none;">
+              <span class="alert-icon">⚠️</span>
+              <span id="errorMessageForm"></span>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal de Confirmación -->
+  <div id="modalEliminar" class="modal" style="display: none;">
+    <div class="modal-content">
+      <h2>⚠️ Confirmar Eliminación</h2>
+      <p>¿Estás seguro de que deseas eliminar esta noticia? Esta acción no se puede deshacer.</p>
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btnCancelarModal">Cancelar</button>
+        <button class="btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/panel.js"></script>
+</body>
+</html>
+
